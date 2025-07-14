@@ -16,7 +16,8 @@ import {
   Box,
   VStack,
   HStack,
-  Text
+  Text,
+  Textarea
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { fetchWithToken } from "../../utils/fetchWithToken";
@@ -118,7 +119,7 @@ export default function EditPackModal({ isOpen, onClose, pack, onPackUpdated }) 
 
             <FormControl>
               <FormLabel>Description</FormLabel>
-              <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} />
             </FormControl>
 
             <FormControl>
