@@ -52,16 +52,23 @@ const toast = useToast()
   const { searchValue } = useSearch();
 
   useEffect(() => {
-    const fetchPacks = async () => {
-      try {
-        const res = await fetchWithToken(`${host}/packs/all`);
-        const data = await res.json();
+  const fetchPacks = async () => {
+    try {
+      const res = await fetchWithToken(`${host}/packs/all`);
+      if (!res.ok) throw new Error("Erreur serveur");
+      const data = await res.json();
+      if (Array.isArray(data)) {
         setPacks(data);
-      } catch (err) {
+      } else {
+        setPacks([]);
       }
-    };
-    fetchPacks();
-  }, []);
+    } catch (err) {
+      setPacks([]); // Assure un tableau vide en cas d'erreur
+    }
+  };
+  fetchPacks();
+}, []);
+
 
   const handleOpenDescription = (pack) => {
     setSelectedPack(pack);
@@ -86,10 +93,13 @@ const toast = useToast()
   };
  
 
-  const filteredPacks = packs.filter(pack =>
-    pack.libelle_pack.toLowerCase().includes(searchValue.toLowerCase()) ||
-    pack.description_pack.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredPacks = Array.isArray(packs) 
+  ? packs.filter((pack) =>
+      pack.libelle_pack.toLowerCase().includes(searchValue.toLowerCase()) ||
+      pack.description_pack.toLowerCase().includes(searchValue.toLowerCase())
+    )
+  : [];
+
 
 
    const components = {
