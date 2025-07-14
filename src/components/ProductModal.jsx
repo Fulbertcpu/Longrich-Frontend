@@ -31,48 +31,30 @@ function ProductModal({ isOpen, onClose, product }) {
 
 
   const components = {
-  h1: ({ node, ...props }) => (
-    <Heading as="h1" size="lg" color="teal.600" mt={6} mb={4} {...props} />
-  ),
-
-  h2: ({ node, ...props }) => (
-    <Heading as="h2" size="lg" color="teal.600" mt={6} mb={4} {...props} />
-  ),
-  h3: ({ node, ...props }) => (
-    <Heading as="h3" size="md" color="teal.500" mt={4} mb={2} {...props} />
-  ),
-   h4: ({ node, ...props }) => (
-    <Heading as="h4" size="sm" color="teal.600" mt={3} mb={2} {...props} />
-  ),
-  p: ({ node, children, ...props }) => {
-    // Détection d’un avertissement
-    const isWarning = typeof children === 'string' && children.includes('Précaution');
-    return (
-      <Box
-        bg={isWarning ? 'red.200' : 'transparent'}
-        borderLeft={isWarning ? '4px solid red' : 'none'}
-        p={isWarning ? 3 : 0}
-        my={isWarning ? 4 : 0}
-      >
-        <Text fontSize="md" color={isWarning ? 'red.800' : 'inherit'} {...props}>
-          {children}
-        </Text>
-      </Box>
-    );
-  },
-  ul: ({ node, ...props }) => (
-    <UnorderedList pl={5} mb={3} {...props} />
-  ),
-  li: ({ node, ...props }) => (
-    <ListItem mb={2} {...props} />
-  ),
-  strong: ({ node, ...props }) => (
-    <Text as="strong" fontWeight="bold" color="red.600" {...props} />
-  ),
-  blockquote: ({ node, ...props }) => (
-   <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />
-  )
-};
+    h1: (props) => <Heading as="h1" size="lg" color="teal.600" mt={6} mb={4} {...props} />,
+    h2: (props) => <Heading as="h2" size="lg" color="teal.600" mt={6} mb={4} {...props} />,
+    h3: (props) => <Heading as="h3" size="md" color="teal.500" mt={4} mb={2} {...props} />,
+    h4: (props) => <Heading as="h4" size="sm" color="teal.600" mt={3} mb={2} {...props} />,
+    p: ({ children, ...props }) => {
+      const isWarning = typeof children === 'string' && children.includes('Précaution');
+      return (
+        <Box
+          bg={isWarning ? 'red.200' : 'transparent'}
+          borderLeft={isWarning ? '4px solid red' : 'none'}
+          p={isWarning ? 3 : 0}
+          my={isWarning ? 4 : 0}
+        >
+          <Text fontSize="md" color={isWarning ? 'red.800' : 'inherit'} {...props}>
+            {children}
+          </Text>
+        </Box>
+      );
+    },
+    ul: (props) => <UnorderedList pl={5} mb={3} {...props} />,
+    li: (props) => <ListItem mb={2} {...props} />,
+    strong: (props) => <Text as="strong" fontWeight="bold" color="red.600" {...props} />,
+    blockquote: (props) => <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />
+  };
 
  
   return (
