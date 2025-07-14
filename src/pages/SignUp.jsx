@@ -22,7 +22,7 @@ const SignUpModal = () => {
   return (
     <Box
       h="100vh"
-      bgImage={`url(public/longrich3.jpg)`}
+      bgImage={`url(/longrich3.jpg)`}
       bgSize="cover"
       bgPosition="center"
       bgRepeat="no-repeat"

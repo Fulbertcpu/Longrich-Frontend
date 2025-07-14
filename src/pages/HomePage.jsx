@@ -1,4 +1,4 @@
-import { SimpleGrid, Box, Heading } from "@chakra-ui/react";
+import { SimpleGrid, Box, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { fetchWithToken } from "../utils/fetchWithToken";
@@ -7,31 +7,49 @@ import { useSearch } from "../hooks/SearchContext";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
   const { searchValue } = useSearch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetchWithToken(`${host}/products/allProducts`);
-      const data = await res.json();
-      setProducts(data);
+      try {
+        const res = await fetchWithToken(`${host}/products/allProducts`);
+        if (!res.ok) throw new Error("Erreur serveur");
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error("Format inattendu");
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+        console.error("Erreur lors du fetch des produits :", err);
+      }
     };
     fetchData();
   }, []);
 
-  const filteredProducts = products.filter((prod) =>
-    prod.libelle_produit.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredProducts = Array.isArray(products)
+    ? products.filter((prod) =>
+        prod.libelle_produit
+          .toLowerCase()
+          .includes(searchValue.toLowerCase())
+      )
+    : [];
 
   return (
     <Box p={[2, 4, 6]}>
       <Heading mb={6} size="lg" textAlign="center">
         🛍️ Nos Produits
       </Heading>
-      <SimpleGrid columns={[1, 2, 3]} spacing={6}>
-        {filteredProducts.map((prod) => (
-          <ProductCard key={prod.id_produit} product={prod} />
-        ))}
-      </SimpleGrid>
+      {error ? (
+        <Text color="red.500" textAlign="center">
+          {error}
+        </Text>
+      ) : (
+        <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+          {filteredProducts.map((prod) => (
+            <ProductCard key={prod.id_produit} product={prod} />
+          ))}
+        </SimpleGrid>
+      )}
     </Box>
   );
 }

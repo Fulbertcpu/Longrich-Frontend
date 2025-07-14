@@ -46,7 +46,7 @@ function AboutPage() {
           Nos produits sont conçus pour améliorer la santé, renforcer le système immunitaire et embellir le quotidien. Ils sont à base de plantes, sans effets secondaires.
         </Text>
         <SimpleGrid columns={[1, 2, 3]} spacing={6}>
-          <Image src="/public/prod1.webp" alt="Produit 1" borderRadius="md" />
+          <Image src="/prod1.webp" alt="Produit 1" borderRadius="md" />
          
         </SimpleGrid>
            <Box mt={6}>
