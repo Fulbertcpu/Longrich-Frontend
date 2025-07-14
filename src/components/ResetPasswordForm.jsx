@@ -7,7 +7,7 @@ import {
 
 const ResetPasswordForm = () => {
   const { token } = useParams();
-  const [motDePasse, setMotDePasse] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [erreur, setErreur] = useState("");
@@ -19,7 +19,7 @@ const ResetPasswordForm = () => {
     setErreur("");
     setSuccess("");
 
-    if (motDePasse !== confirm) {
+    if (newPassword !== confirm) {
       setErreur("Les mots de passe ne correspondent pas");
       return;
     }
@@ -28,7 +28,7 @@ const ResetPasswordForm = () => {
       const res = await fetch(`${host}/user/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ motDePasse }),
+        body: JSON.stringify({ newPassword }),
       });
 
       const data = await res.json();
@@ -55,7 +55,7 @@ const ResetPasswordForm = () => {
         <VStack spacing={4}>
           <FormControl isInvalid={submitted && !motDePasse}>
             <FormLabel>Nouveau mot de passe :</FormLabel>
-            <Input type="password" value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} />
+            <Input type="password" value={motDePasse} onChange={(e) => setNewPassword(e.target.value)} />
             <FormErrorMessage>Le mot de passe est requis.</FormErrorMessage>
           </FormControl>
 
