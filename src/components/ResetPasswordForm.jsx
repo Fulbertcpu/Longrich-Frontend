@@ -55,7 +55,7 @@ const ResetPasswordForm = () => {
         <VStack spacing={4}>
           <FormControl isInvalid={submitted && !motDePasse}>
             <FormLabel>Nouveau mot de passe :</FormLabel>
-            <Input type="password" value={motDePasse} onChange={(e) => setNewPassword(e.target.value)} />
+            <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             <FormErrorMessage>Le mot de passe est requis.</FormErrorMessage>
           </FormControl>
 
