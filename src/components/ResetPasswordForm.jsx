@@ -53,7 +53,7 @@ const ResetPasswordForm = () => {
       {success && <Alert status="success" mb={4}><AlertIcon />{success}</Alert>}
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
-          <FormControl isInvalid={submitted && !motDePasse}>
+          <FormControl isInvalid={submitted && !newPassword}>
             <FormLabel>Nouveau mot de passe :</FormLabel>
             <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             <FormErrorMessage>Le mot de passe est requis.</FormErrorMessage>
