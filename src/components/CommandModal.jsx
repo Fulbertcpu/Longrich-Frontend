@@ -2,38 +2,53 @@ import { useEffect, useState } from "react";
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader,
   ModalCloseButton, ModalBody, Button, Text,
-  Box, Collapse, IconButton, useToast
+  Box, Collapse, IconButton, useToast, Spinner
 } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { fetchWithToken } from "../utils/fetchWithToken";
 
 const host = import.meta.env.VITE_API_URL;
 
-export default function CommandModal({ isOpen, onClose, user, type_commande, id_source, onCommandeConfirmed }) {
+export default function CommandModal({
+  isOpen,
+  onClose,
+  user,
+  type_commande,
+  id_source,
+  onCommandeConfirmed
+}) {
   const [zones, setZones] = useState([]);
   const [selected, setSelected] = useState(null);
   const [openDescIdx, setOpenDescIdx] = useState(null);
+  const [loading, setLoading] = useState(true);
   const toast = useToast();
 
   useEffect(() => {
     const fetchDistributeurs = async () => {
-      const res = await fetchWithToken(`${host}/distributors/allDistributors`);
-      const data = await res.json();
-      const sameCountryDistributors = data.filter(d => d.id_pays === user.id_pays);
+      setLoading(true);
+      try {
+        const res = await fetchWithToken(`${host}/distributors/allDistributors`);
+        const data = await res.json();
+        const sameCountryDistributors = data.filter(d => d.id_pays === user.id_pays);
 
-      const allZones = [];
-      sameCountryDistributors.forEach(dis => {
-        dis.zones.forEach(zone => {
-          allZones.push({
-            nom_zone: zone.nom_zone,
-            description: zone.zone_description,
-            id_distributeur: dis.id_distributeur,
-            id_zone: zone.id_zone
+        const allZones = [];
+        sameCountryDistributors.forEach(dis => {
+          dis.zones.forEach(zone => {
+            allZones.push({
+              nom_zone: zone.nom_zone,
+              description: zone.zone_description,
+              id_distributeur: dis.id_distributeur,
+              id_zone: zone.id_zone
+            });
           });
         });
-      });
 
-      setZones(allZones);
+        setZones(allZones);
+      } catch (error) {
+        console.error("Erreur lors du chargement des zones :", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (isOpen) fetchDistributeurs();
@@ -65,7 +80,9 @@ export default function CommandModal({ isOpen, onClose, user, type_commande, id_
 
       if (type_commande === "panier") {
         await fetchWithToken(`${host}/carts/vider/${id_source}`, {
-           method: "DELETE" });
+          method: "DELETE"
+        });
+
         setTimeout(() => window.location.reload(), 1200);
       }
 
@@ -91,38 +108,45 @@ export default function CommandModal({ isOpen, onClose, user, type_commande, id_
         <ModalCloseButton />
         <ModalBody overflowY="auto" maxH="70vh">
           <Text mb={4} color="red.600" fontWeight="bold">
-            NB : Payer à la réception (excepté l'expédition)
+            NB : Payer à la réception (excepté l&apos;expédition)
           </Text>
 
-          {zones.map((zone, idx) => (
-            <Box
-              key={idx}
-              p={3}
-              mb={3}
-              border={selected === zone ? "2px solid blue" : "1px solid gray"}
-              borderRadius="md"
-              cursor="pointer"
-              onClick={() => setSelected(zone)}
-              bg={selected === zone ? "blue.50" : "white"}
-            >
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Text fontWeight="semibold">{zone.nom_zone}</Text>
-                <IconButton
-                  icon={openDescIdx === idx ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                  size="sm"
-                  variant="ghost"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenDescIdx(openDescIdx === idx ? null : idx);
-                  }}
-                  aria-label="Afficher la description"
-                />
-              </Box>
-              <Collapse in={openDescIdx === idx} animateOpacity>
-                <Text mt={2} fontSize="sm" color="gray.700">{zone.description}</Text>
-              </Collapse>
+          {loading ? (
+            <Box textAlign="center" py={6}>
+              <Spinner size="lg" color="blue.500" />
+              <Text mt={2} fontSize="sm" color="gray.600">Chargement des zones...</Text>
             </Box>
-          ))}
+          ) : (
+            zones.map((zone, idx) => (
+              <Box
+                key={idx}
+                p={3}
+                mb={3}
+                border={selected === zone ? "2px solid blue" : "1px solid gray"}
+                borderRadius="md"
+                cursor="pointer"
+                onClick={() => setSelected(zone)}
+                bg={selected === zone ? "blue.50" : "white"}
+              >
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Text fontWeight="semibold">{zone.nom_zone}</Text>
+                  <IconButton
+                    icon={openDescIdx === idx ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenDescIdx(openDescIdx === idx ? null : idx);
+                    }}
+                    aria-label="Afficher la description"
+                  />
+                </Box>
+                <Collapse in={openDescIdx === idx} animateOpacity>
+                  <Text mt={2} fontSize="sm" color="gray.700">{zone.description}</Text>
+                </Collapse>
+              </Box>
+            ))
+          )}
 
           <Button
             mt={4}
@@ -137,4 +161,4 @@ export default function CommandModal({ isOpen, onClose, user, type_commande, id_
       </ModalContent>
     </Modal>
   );
-}
+} 
