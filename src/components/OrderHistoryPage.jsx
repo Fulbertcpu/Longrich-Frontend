@@ -105,7 +105,7 @@ export default function OrderHistoryPage() {
       <Box padding="10px" mb="5px">
         <Text color="red" fontWeight="bolder">
           NB: Payer à la réception (signaler toute demande de paiement avant la
-          réception)
+          réception en dehors de l'expédition)
         </Text>
         <Text
           color={"blue"}

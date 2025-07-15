@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader,
-  ModalCloseButton, ModalBody, Button,
-  Text,
-  useToast
+  ModalCloseButton, ModalBody, Button, Text,
+  Box, Collapse, IconButton, useToast
 } from "@chakra-ui/react";
+import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { fetchWithToken } from "../utils/fetchWithToken";
 
 const host = import.meta.env.VITE_API_URL;
@@ -12,6 +12,7 @@ const host = import.meta.env.VITE_API_URL;
 export default function CommandModal({ isOpen, onClose, user, type_commande, id_source, onCommandeConfirmed }) {
   const [zones, setZones] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [openDescIdx, setOpenDescIdx] = useState(null);
   const toast = useToast();
 
   useEffect(() => {
@@ -64,16 +65,10 @@ export default function CommandModal({ isOpen, onClose, user, type_commande, id_
 
       if (type_commande === "panier") {
         await fetchWithToken(`${host}/carts/vider/${id_source}`, {
-          method: "DELETE"
-        });
-
-        // Attend que le toast s'affiche avant de recharger
-        setTimeout(() => {
-          window.location.reload();
-        }, 1200); // Laisse le toast s'afficher
+           method: "DELETE" });
+        setTimeout(() => window.location.reload(), 1200);
       }
 
-      // Appelle la fonction parent pour notifier la commande
       onCommandeConfirmed();
       onClose();
     } catch (error) {
@@ -89,38 +84,53 @@ export default function CommandModal({ isOpen, onClose, user, type_commande, id_
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" scrollBehavior="inside">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxH="90vh">
         <ModalHeader>Sélectionner une zone</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Text
-            style={{
-              padding: "10px",
-              marginBottom: "5px",
-              color: "red",
-              fontWeight: "bolder"
-            }}
-          >
-            NB: Payer à la réception
+        <ModalBody overflowY="auto" maxH="70vh">
+          <Text mb={4} color="red.600" fontWeight="bold">
+            NB : Payer à la réception (excepté l'expédition)
           </Text>
+
           {zones.map((zone, idx) => (
-            <div
+            <Box
               key={idx}
+              p={3}
+              mb={3}
+              border={selected === zone ? "2px solid blue" : "1px solid gray"}
+              borderRadius="md"
+              cursor="pointer"
               onClick={() => setSelected(zone)}
-              style={{
-                padding: "10px",
-                marginBottom: "5px",
-                border: selected === zone ? "2px solid blue" : "1px solid gray",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
+              bg={selected === zone ? "blue.50" : "white"}
             >
-              <strong>{zone.nom_zone}</strong> – {zone.description}
-            </div>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Text fontWeight="semibold">{zone.nom_zone}</Text>
+                <IconButton
+                  icon={openDescIdx === idx ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  size="sm"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDescIdx(openDescIdx === idx ? null : idx);
+                  }}
+                  aria-label="Afficher la description"
+                />
+              </Box>
+              <Collapse in={openDescIdx === idx} animateOpacity>
+                <Text mt={2} fontSize="sm" color="gray.700">{zone.description}</Text>
+              </Collapse>
+            </Box>
           ))}
-          <Button mt={4} colorScheme="blue" onClick={handleConfirm} isDisabled={!selected}>
+
+          <Button
+            mt={4}
+            colorScheme="blue"
+            w="full"
+            onClick={handleConfirm}
+            isDisabled={!selected}
+          >
             Confirmer la commande
           </Button>
         </ModalBody>
