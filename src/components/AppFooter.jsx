@@ -32,7 +32,7 @@ function AppFooter() {
           <Stack direction={"row"} spacing={4} mt={{ base: 4, md: 0 }}>
             <IconButton
               as="a"
-              href="#"
+              href="https://www.facebook.com/share/171R5YvnoX/"
               aria-label="Facebook"
               icon={<FaFacebook />}
               variant="ghost"

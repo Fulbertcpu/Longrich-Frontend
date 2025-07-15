@@ -18,7 +18,7 @@ const host = import.meta.env.VITE_API_URL;
  
   const fetchZones = async () => {
     try {
-      const res = await fetchWithToken("http://localhost:8080/zones/allZones");
+      const res = await fetchWithToken(`${host}/zones/allZones`);
       const data = await res.json();
       setZones(data);
     } catch {
