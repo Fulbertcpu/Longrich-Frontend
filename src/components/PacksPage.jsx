@@ -119,8 +119,18 @@ function PacksPage() {
         </Box>
       );
     },
-    ul: (props) => <UnorderedList pl={5} mb={3} {...props} />,
-    li: (props) => <ListItem mb={2} {...props} />,
+     ul: ({children, ...props}) =>(
+      <UnorderedList pl={5} mb={3} {...props}>
+        {children}
+      </UnorderedList>
+    ),
+      
+    li: ({children, ...props}) =>(
+      <ListItem mb={2} {...props}>
+        {children}
+      </ListItem>
+
+    ),
     strong: (props) => <Text as="strong" fontWeight="bold" color="red.600" {...props} />,
     blockquote: (props) => <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />
   };
