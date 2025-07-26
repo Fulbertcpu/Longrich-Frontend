@@ -121,15 +121,17 @@ function PacksPage() {
         </Box>
       );
     },
-     ul: ({children, ...props}) =>(
-      <List pl={5} mb={3} {...props}>
-        {React.children.map((children,(child)=>(
-           <ListItem mb={2}>
-            {child.props.children}
-           </ListItem>
-        )))}
-      </List>
-    ),
+      ul: ({children, ...props}) =>(
+           <List pl={5} mb={3} {...props}>
+             {React.Children.map((children,(child,index)=>
+             React.isValidElement(child) ? (
+                <ListItem mb={2}>
+                 {child}
+                </ListItem>
+             ):null
+           ))}
+           </List>
+         ),
     
     strong: (props) => <Text as="strong" fontWeight="bold" color="red.600" {...props} />,
     blockquote: (props) => <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />

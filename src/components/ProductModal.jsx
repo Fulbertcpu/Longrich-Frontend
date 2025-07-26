@@ -53,11 +53,13 @@ function ProductModal({ isOpen, onClose, product }) {
     },
     ul: ({children, ...props}) =>(
       <List pl={5} mb={3} {...props}>
-        {React.children.map((children,(child)=>(
+        {React.Children.map((children,(child,index)=>
+        React.isValidElement(child) ? (
            <ListItem mb={2}>
-            {child.props.children}
+            {child}
            </ListItem>
-        )))}
+        ):null
+      ))}
       </List>
     ),
     
