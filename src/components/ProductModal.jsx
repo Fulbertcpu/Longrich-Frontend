@@ -16,7 +16,7 @@ import {useNavigate} from "react-router-dom"
 import { InfoIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { addToCart } from "../utils/addToCart.js";
-
+import React from "react"
 function ProductModal({ isOpen, onClose, product }) {
   const [currentImage, setCurrentImage] = useState(0);
   const [showDescription, setShowDescription] = useState(false);

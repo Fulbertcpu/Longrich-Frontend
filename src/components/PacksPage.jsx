@@ -20,6 +20,7 @@ import {
   ListItem,
   List
 } from "@chakra-ui/react";
+import React from "react"
 import { Spinner, Center } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
