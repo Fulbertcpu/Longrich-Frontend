@@ -17,10 +17,8 @@ import {
   IconButton,
   useToast,
   UnorderedList,
-  ListItem,
-  List
+  ListItem
 } from "@chakra-ui/react";
-import React from "react"
 import { Spinner, Center } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -121,18 +119,8 @@ function PacksPage() {
         </Box>
       );
     },
-      ul: ({children, ...props}) =>(
-           <List pl={5} mb={3} {...props}>
-             {React.Children.map((children,(child,index)=>
-             React.isValidElement(child) ? (
-                <ListItem mb={2}>
-                 {child}
-                </ListItem>
-             ):null
-           ))}
-           </List>
-         ),
-    
+    ul: (props) => <UnorderedList pl={5} mb={3} {...props} />,
+    li: (props) => <ListItem mb={2} {...props} />,
     strong: (props) => <Text as="strong" fontWeight="bold" color="red.600" {...props} />,
     blockquote: (props) => <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />
   };
