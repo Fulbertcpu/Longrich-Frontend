@@ -50,7 +50,7 @@ function ProductModal({ isOpen, onClose, product }) {
         </Box>
       );
     },
-    ul: ({children, ...props}) => <UnorderedList pl={5} mb={3} {...props} />,
+    ul: (props) => <UnorderedList pl={5} mb={3} {...props} />,
     li: (props) => <ListItem mb={2} {...props} />,
     strong: (props) => <Text as="strong" fontWeight="bold" color="red.600" {...props} />,
     blockquote: (props) => <Box bg="gray.50" p={4} borderLeft="4px solid teal" my={4} {...props} />
