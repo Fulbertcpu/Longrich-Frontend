@@ -8,7 +8,8 @@ import {
     IconButton,Heading,
     useToast,
     UnorderedList,
-    ListItem
+    ListItem,
+    List
 } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import {useNavigate} from "react-router-dom"
