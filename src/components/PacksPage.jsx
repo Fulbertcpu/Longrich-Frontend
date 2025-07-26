@@ -120,9 +120,9 @@ function PacksPage() {
       );
     },
      ul: ({children, ...props}) =>(
-      <UnorderedList pl={5} mb={3} {...props}>
+      <List pl={5} mb={3} {...props}>
         {children}
-      </UnorderedList>
+      </List>
     ),
       
     li: ({children, ...props}) =>(
